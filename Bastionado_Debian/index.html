@@ -1,0 +1,221 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>BASTIONADO DE SISTEMA DEBIAN</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="Bastionado_Debian"
+                  title="BASTIONADO DE SISTEMA DEBIAN"
+                  environment="web"
+                  feedback-link="https://github.com/Redhawk1981981/BRS_proyecto1_Bast_Debian/issues/1">
+    
+      <google-codelab-step label="Introducción" duration="0">
+        <p>En esta Actividad, se va a realizar el Bastionado de una instalación del sistema Debian, así como del arranque del mismo. Vamos a usar un sistema Debian 12. A fin de no hacer el documento demasiado extenso y pesado de leer, vamos a omitir todos los pasos de la configuración de la instalación que no tienen mucho o nada que ver con la seguridad del sistema, y vamos a centrarnos principalmente en la parte del particionado, en la que procederemos a crear un LVM cifrado para varias de las particiones. También indicar que la instalación se va a hacer sin conexión a internet, para evitar que se pueda sufrir un ataque durante este proceso en el que el equipo es muy vulnerable.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Instalación y bastionado de la instalación del sistema Debian" duration="0">
+        <h2 is-upgraded>Establecimiento de contraseñas de usuario.</h2>
+<p>Comenzaremos nuestra instalación de forma normal, sin internet como hemos comentado, y cuando lleguemos a la parte en que se nos solicita los nombres de usuario root, de usuario y contraseñas, debemos configurar unas contraseñas que sean realmente seguras y robustas, que sean difíciles de averiguar por &#34;fuerza bruta&#34;.</p>
+<p class="image-container"><img alt="alt text" src="img/f89d249d615ee10f.png"></p>
+<p class="image-container"><img alt="alt text" src="img/4707b53c2353dc08.png"></p>
+<p class="image-container"><img alt="alt text" src="img/b27f6d303184b08b.png"></p>
+<p class="image-container"><img alt="alt text" src="img/517c513ca30f640b.png"></p>
+<h2 is-upgraded>Particionado de Discos</h2>
+<p>Esta es la parte de la instalación mas importante a la hora de hacer un bastionado de la misma, ya que procederemos a crear un grupo LVM cifrado, para la mayoría de las particiones.</p>
+<p>Lo primero que haremos, cuando lleguemos a esta parte del particionado, es elegir la opción &#34;Manual&#34;.</p>
+<p class="image-container"><img alt="alt text" src="img/ace727be7bacb0d1.png"></p>
+<p>Se nos mostrarán los discos que tenemos disponibles, en nuestro caso, uno. Seleccionamos el disco, y aceptaremos comenzar con el particionado del mismo.</p>
+<p class="image-container"><img alt="alt text" src="img/6c88d769628a037c.png"></p>
+<p class="image-container"><img alt="alt text" src="img/10b95f769466bb9.png"></p>
+<p>Seleccionamos el espacio libre y creamos una partición nueva.</p>
+<p class="image-container"><img alt="alt text" src="img/446d71f57aaf4de.png"></p>
+<p class="image-container"><img alt="alt text" src="img/7e5422f9574d603d.png"></p>
+<p class="image-container"><img alt="alt text" src="img/db06a6d2fc81585d.png"></p>
+<p>La crearemos con un tamaño de 1Gb, y la configuramos como &#34;partición primaria&#34; ya que esta partición será la que destinemos a &#34;/boot&#34;, es decir, será la que contendrá los archivos de arranque del sistema.</p>
+<p class="image-container"><img alt="alt text" src="img/9c7e39d76a30de5e.png"></p>
+<p>La crearemos al principio del espacio disponible.</p>
+<p class="image-container"><img alt="alt text" src="img/2bca4048f79004fc.png"></p>
+<p>Una vez creada la partición, procedemos a configurarla de la siguiente manera:</p>
+<ul>
+<li>Sistema de ficheros ext4 transaccional.</li>
+<li>Punto de montaje: /boot.</li>
+<li>marca de arranque: activada.</li>
+</ul>
+<p class="image-container"><img alt="alt text" src="img/a24f5eb65199b598.png"></p>
+<p class="image-container"><img alt="alt text" src="img/938405ec56fd7104.png"></p>
+<p>Ahora, procedemos a crear el grupo de volúmenes lógicos (LVM), para ello, seleccionamos el espacio libre tras crear la partición /boot, y accedemos a &#34;Configurar el gestor de volúmenes lógicos (LVM)&#34;.</p>
+<p class="image-container"><img alt="alt text" src="img/281998412e038302.png"></p>
+<p>Seleccionamos &#34;si&#34; a guardar el esquema de particionado actual.</p>
+<p class="image-container"><img alt="alt text" src="img/ad62ae518094734.png"></p>
+<p>y crearemos el grupo de volúmenes seleccionando la opción para ello.</p>
+<p class="image-container"><img alt="alt text" src="img/1d0a5104e5e4a902.png"></p>
+<p>le ponemos un nombre.</p>
+<p class="image-container"><img alt="alt text" src="img/bf266d9fb64b22c8.png"></p>
+<p>seleccionamos el espacio libre.</p>
+<p class="image-container"><img alt="alt text" src="img/5e42076f1ee693b8.png"></p>
+<p>y guardaremos de nuevo el esquema actual del particionado.</p>
+<p class="image-container"><img alt="alt text" src="img/8290562a245f28a6.png"></p>
+<p>Con esto, ya tendríamos creado nuestro grupo de volúmenes, por lo que ahora, crearemos volúmenes en el grupo, solo los vamos a crear, los configuraremos algunos pasos mas adelante. Para ello, seleccionaremos &#34;Crear un volumen lógico&#34;, seleccionamos el grupo en el que queremos crearlo y le asignamos un nombre, en nuestro caso, como este primer volumen lo vamos a destinar al sistema de archivos raíz, lo llamaremos root.</p>
+<p class="image-container"><img alt="alt text" src="img/7223583f2a3a36bf.png"></p>
+<p class="image-container"><img alt="alt text" src="img/c20e541ff2e2cb1d.png"></p>
+<p class="image-container"><img alt="alt text" src="img/37f7b578592daa5f.png"></p>
+<p>Este primer volumen lógico, lo crearemos con un tamaño de 10Gb, ya que será destinado a &#34;/&#34; y con ese tamaño será suficiente para los archivos del sistema.</p>
+<p class="image-container"><img alt="alt text" src="img/b7a168b968dcd304.png"></p>
+<p>Creamos del mismo modo que antes, otro volumen lógico, que destinaremos a la memoria de intercambio, por lo que lo llamaremos &#34;swap&#34; y le asignamos un tamaño de 4Gb, que es el tamaño recomendado teniendo en cuenta que debe ser el doble de la memoria RAM sin sobrepasar los 8Gb.</p>
+<p class="image-container"><img alt="alt text" src="img/55f560e7226270a1.png"></p>
+<p class="image-container"><img alt="alt text" src="img/a368a33820a20320.png"></p>
+<p>Tras crear el volumen &#34;swap&#34;, creamos el volumen al que llamaremos &#34;home&#34;, que será el que destinemos a los archivos de los usuarios. A este volumen le asignaremos el espacio restante.</p>
+<p class="image-container"><img alt="alt text" src="img/39eb5eab06938023.png"></p>
+<p class="image-container"><img alt="alt text" src="img/e0ee800690486b68.png"></p>
+<p>Una vez terminada esta creación de volúmenes, podremos ver un resumen de las modificaciones.</p>
+<p class="image-container"><img alt="alt text" src="img/cd4fc4e003047d44.png"></p>
+<p class="image-container"><img alt="alt text" src="img/65daf69a2855f5d4.png"></p>
+<p>Lo siguiente que haremos, será cifrar estos volúmenes que hemos creado. Para hacer esto, seleccionaremos &#34;Configurar los volúmenes cifrados&#34; y en &#34;Crear volúmenes cifrados&#34;.</p>
+<p class="image-container"><img alt="alt text" src="img/797d4d3bc243a93f.png"></p>
+<p class="image-container"><img alt="alt text" src="img/1540d7f3255caabd.png"></p>
+<p>Seleccionamos los volúmenes a cifrar, en nuestro caso, seleccionaremos los tres que hemos creado.</p>
+<p class="image-container"><img alt="alt text" src="img/423a133e3a1bf189.png"></p>
+<p>Seleccionaremos por cada volumen las opciones del cifrado, podemos cambiarlas, pero nosotros las vamos a dejar por defecto, pues nos viene bien así.</p>
+<p class="image-container"><img alt="alt text" src="img/6c43dbb4267c3b89.png"></p>
+<p class="image-container"><img alt="alt text" src="img/a5aa6ce5e8ecb667.png"></p>
+<p class="image-container"><img alt="alt text" src="img/36d9e89884a5bddd.png"></p>
+<p>Una vez seleccionada la configuración del cifrado, se nos solicitará por cada volumen, si queremos sobrescribir con datos aleatorios para evitar que si había datos anteriores al cifrado, estos se puedan copiar. Seleccionamos que si.</p>
+<p class="image-container"><img alt="alt text" src="img/7d62168d0b3c571e.png"></p>
+<p class="image-container"><img alt="alt text" src="img/ba50b626796acb.png"></p>
+<p class="image-container"><img alt="alt text" src="img/96058f7da761582d.png"></p>
+<p class="image-container"><img alt="alt text" src="img/56858dc1a28c04c1.png"></p>
+<p class="image-container"><img alt="alt text" src="img/44cd80c41244c42c.png"></p>
+<p class="image-container"><img alt="alt text" src="img/87971d88865f26e1.png"></p>
+<p>Ahora, la parte mas importante del cifrado, debemos asignar una frase de contraseña (ya que es el método de contraseña que habíamos elegido) esta frase debe ser lo mas compleja y robusta posible, para evitar que pueda ser comprometida por &#34;fuerza bruta&#34;, podemos usar todo tipo de caracteres, y puede ser distinta para cada volumen si así lo queremos.</p>
+<p class="image-container"><img alt="alt text" src="img/dd1a3c3486ffe118.png"></p>
+<p class="image-container"><img alt="alt text" src="img/88f384398cd6f483.png"></p>
+<p class="image-container"><img alt="alt text" src="img/a5f0995d94421901.png"></p>
+<p>Una vez que hemos definido la frase de contraseña, veremos un resumen donde se nos mostrarán los volúmenes con la marca de &#34;cifrado&#34;.</p>
+<p class="image-container"><img alt="alt text" src="img/b03dc603fc089edf.png"></p>
+<p>Una vez que ya tenemos los volúmenes cifrados, vamos a configurarlos. La configuración la hacemos tras el cifrado y no al revés porque al cifrar los volúmenes pierden a configuración realizada, por lo que deberíamos hacerla de nuevo.</p>
+<p>Para configurarlos, hacemos lo siguiente con cada volumen:</p>
+<ul>
+<li>Seleccionamos el volumen a configurar.</li>
+<li>Seleccionamos el punto de montaje en los volúmenes root y home y en el caso del volumen swap, seleccionamos &#34;Utilizar como&#34; memoria de intercambio.</li>
+</ul>
+<p class="image-container"><img alt="alt text" src="img/8706e6058ba3ab2f.png"></p>
+<p class="image-container"><img alt="alt text" src="img/7f5552228c4529ca.png"></p>
+<p class="image-container"><img alt="alt text" src="img/30ff486a26d0fc7f.png"></p>
+<p class="image-container"><img alt="alt text" src="img/3f9648c6c211b1b7.png"></p>
+<p class="image-container"><img alt="alt text" src="img/870481c1843e5e28.png"></p>
+<p class="image-container"><img alt="alt text" src="img/d6925a615ffb53d7.png"></p>
+<p>Veremos un resumen de toda la configuración, y ya podremos confirmar los cambios, con lo que comenzará la instalación.</p>
+<p class="image-container"><img alt="alt text" src="img/8e51b6ee8c44eacc.png"></p>
+<p class="image-container"><img alt="alt text" src="img/4f698bcffc1d0e6f.png"></p>
+<p class="image-container"><img alt="alt text" src="img/734d02ef5be50ec7.png"></p>
+<p>Seleccionaremos &#34;si&#34; para que se instale el cargador de arranque &#34;GRUB&#34; en la unidad arrancable.</p>
+<p class="image-container"><img alt="alt text" src="img/4c2d807d3905b5ee.png"></p>
+<p class="image-container"><img alt="alt text" src="img/142cb908e355d8a9.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Bastionado del Inicio del sistema Debian" duration="0">
+        <p>Una vez que hemos instalado nuestro sistema Debian teniendo en cuenta la securización de la misma, procedemos a realizar otras configuraciones para bastionar el inicio de este.</p>
+<h2 is-upgraded>Ocultación del gestor de arranque &#34;GRUB&#34;</h2>
+<p>Para hacer que el gestor de arranque &#34;GRUB&#34; no se muestre al inicio, debemos hacer lo siguiente:</p>
+<ul>
+<li>Con un editor de texto, accedemos al archivo de configuración de Grub, que se encuentra en la ruta:</li>
+</ul>
+<pre><code>nano /etc/default/grub (usamos sudo)
+</code></pre>
+<p class="image-container"><img alt="alt text" src="img/d060d8979d856d6.png"></p>
+<p>y una vez dentro del archivo de configuración, buscaremos la linea &#34;GRUB TIMEOUT = 5&#34; y la cambiaremos a 0.</p>
+<p class="image-container"><img alt="alt text" src="img/193341b0598d0448.png"></p>
+<p>guardamos los cambios.</p>
+<p class="image-container"><img alt="alt text" src="img/d577c9d522ba61d6.png"></p>
+<p>y actualizamos la configuración de Grub, para que se apliquen los cambios realizados. usamos:</p>
+<pre><code language="language-bash" class="language-bash">sudo update grub
+</code></pre>
+<p class="image-container"><img alt="alt text" src="img/8a1f44cfe0770904.png"></p>
+<h2 is-upgraded>Protección del arranque con contraseña</h2>
+<p>Ahora, procederemos a configurar una contraseña que se nos solicitará en el arranque del sistema. Para hacer esto, usando un editor de texto, modificaremos el archivo en la ruta:</p>
+<pre><code language="language-bash" class="language-bash">sudo nano /etc/grub.d/40_custom (usaremos sudo)
+</code></pre>
+<p>y añadiremos las siguientes lineas:</p>
+<pre><code>set superusers=&#34;root&#34; 
+password root CONTRASEÑA
+</code></pre>
+<p>donde &#34;CONTRASEÑA&#34; es la contraseña que queramos establecer, la cual debe ser robusta y compleja, guardaremos el archivo y realizaremos como antes, un grub update.</p>
+<p class="image-container"><img alt="alt text" src="img/1e8d9a3ba6afd8b5.png"></p>
+<p class="image-container"><img alt="alt text" src="img/20e0d377867a7fed.png"></p>
+<p>Como medida de seguridad extra, podemos cifrar esta contraseña, de modo que no aparezca en texto plano en el archivo de configuración. Para conseguir esto, ejecutaremos lo siguiente:</p>
+<pre><code>sudo grub-mkpasswd-pbkdf2
+</code></pre>
+<p>Nos solicitará la contraseña (recordemos que debe ser compleja y robusta), y tras introducirla dos veces nos devolverá el HASH de la contraseña, el cual copiaremos para poder añadirlo al archivo de configuración, como vemos a continuación.</p>
+<p class="image-container"><img alt="alt text" src="img/4264939abce6a8f7.png"></p>
+<p class="image-container"><img alt="alt text" src="img/34b669510da68bbc.png"></p>
+<p>volvemos de nuevo a ejecutar un grub update.</p>
+<p class="image-container"><img alt="alt text" src="img/d15e02c367b7d594.png"></p>
+<p>Si realizamos una prueba, veremos que al arrancar nuestro sistema, efectivamente, nos pide la contraseña.</p>
+<p class="image-container"><img alt="alt text" src="img/592a5d762773685d.png"></p>
+<h2 is-upgraded>Protección del archivo de configuración</h2>
+<p>Podemos también, cambiar los permisos del archivo de configuración, para que solo pueda modificarlo un usuario con permisos de &#34;root&#34;, para ello, ejecutamos:</p>
+<pre><code language="language-bash" class="language-bash">sudo chmod 700 /etc/grub.d/40_custom
+</code></pre>
+<h2 is-upgraded>Copia de seguridad de los archivos de configuración</h2>
+<p>Realizaremos también una copia de seguridad de los archivos que contienen la configuración del arranque, como pueden ser:</p>
+<ul>
+<li>Archivos de configuración de Grub.</li>
+</ul>
+<pre><code language="language-bash" class="language-bash">sudo cp /boot/grub/grub.cfg /boot/grub/grub.cfg.backup
+</code></pre>
+<p class="image-container"><img alt="alt text" src="img/9bc91b11af1b45e4.png"></p>
+<pre><code language="language-bash" class="language-bash">sudo cp -r /etc/grub.d /etc/grub.d.backup
+</code></pre>
+<p class="image-container"><img alt="alt text" src="img/ff925cdf27d93bbd.png"></p>
+<pre><code language="language-bash" class="language-bash">sudo cp /etc/fstab /etc/fstab.backup
+</code></pre>
+<p class="image-container"><img alt="alt text" src="img/91b41ec25fac4cf3.png"></p>
+<ul>
+<li>Sector de arranque (MBR):</li>
+</ul>
+<pre><code language="language-bash" class="language-bash">sudo dd if=/dev/sda of=/ruta/mbr-backup.img bs=512 count=1
+</code></pre>
+<p class="image-container"><img alt="alt text" src="img/1c74883017970595.png"></p>
+<ul>
+<li>Otros archivos de inicio</li>
+</ul>
+<p class="image-container"><img alt="alt text" src="img/7d0c4ae2109c40b2.png"></p>
+<p class="image-container"><img alt="alt text" src="img/a3c552b3650e67e8.png"></p>
+<p class="image-container"><img alt="alt text" src="img/f0104e23df9ec237.png"></p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

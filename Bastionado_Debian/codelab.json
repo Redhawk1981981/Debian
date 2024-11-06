@@ -1,0 +1,25 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2024-11-06T22:45:38+01:00",
+  "id": "Bastionado_Debian",
+  "duration": 0,
+  "title": "BASTIONADO DE SISTEMA DEBIAN",
+  "summary": "Bastionado de un sistema Debian",
+  "source": "codelab.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "bastionado",
+    "debian"
+  ],
+  "tags": [
+    "bastionado"
+  ],
+  "feedback": "https://github.com/Redhawk1981981/BRS_proyecto1_Bast_Debian/issues/1",
+  "url": "Bastionado_Debian"
+}
